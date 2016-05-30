@@ -56,28 +56,16 @@
     </LinearLayout>
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="297dp"
         android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/button2"
-        android:layout_marginTop="20dp"
-        android:layout_alignParentBottom="true"
+        android:text="Clear All"
+        android:id="@+id/DeleteBtn"
         android:focusableInTouchMode="false"
-        android:isScrollContainer="false"/>
-
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/button3"
-        android:layout_marginTop="20dp"
-        android:layout_alignParentTop="false"
+        android:isScrollContainer="false"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:background="#ff6b6b"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="right"
-        android:layout_alignParentRight="true"
-        android:focusableInTouchMode="false"
-        android:isScrollContainer="false"/>
+        android:layout_marginBottom="10dp" />
 
 </RelativeLayout>

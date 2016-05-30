@@ -1,5 +1,6 @@
 package com.example.malakhau_ti.belbank;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,12 +10,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -28,15 +35,39 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     public String htmlContent;
     boolean isloggedin = false;
 
+    String login;
+    String password;
     // init your codes array here
+    int[] codes = new int[40];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayShowTitleEnabled(false);
+        LayoutInflater mInflater = LayoutInflater.from(this);
+
+        View mCustomView = mInflater.inflate(R.layout.action_bar_custom_view, null);
+
+        TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.title_text);
+        mTitleTextView.setText("Беларусбанк");
+
+        mActionBar.setCustomView(mCustomView);
+        mActionBar.setDisplayShowCustomEnabled(true);
+        Toolbar parent =(Toolbar) mCustomView.getParent();
+        parent.setContentInsetsAbsolute(0,0);
+
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeResources(R.color.green, R.color.red, R.color.yellow,  R.color.blue );
+        swipeRefreshLayout.setColorSchemeResources(R.color.green, R.color.red, R.color.yellow, R.color.blue);
+
+        Toast toast = Toast.makeText(getApplicationContext(),
+                String.valueOf(mActionBar.getHeight()), Toast.LENGTH_SHORT);
+        toast.show();
 
         class MyJavaScriptInterface {
             @JavascriptInterface
@@ -81,8 +112,8 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
             public void onPageFinished(WebView view, String url) {
 //                if(!isloggedin){
                 view.loadUrl("javascript:(function() { " +
-                        "document.getElementById('userID').value='"+(String)YourLogin+"';" +
-                        "document.getElementById('password').value='"+(String)YourPassword+"';" +
+                        "document.getElementById('userID').value='" + login + "';" +
+                        "document.getElementById('password').value='" + password + "';" +
                         "this.disabled=true;document.forms.LoginForm1.bbIbLoginAction.value='in-action';document.forms.LoginForm1.submit();" +
                         "})()");
 
@@ -90,22 +121,22 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
                         "javascript:window.HTMLOUT.processHTML(document.getElementsByTagName('span')[0].innerHTML.replace(/\\D+/g,\"\"));" +
                         "})()");
 
-                if(htmlContent!=null){
-                 wv.loadUrl("javascript:(function() { " +
-                        "document.getElementById('codevalue').value='"+String.valueOf(codes[Integer.valueOf(htmlContent)-1])+"';"+
-                        "this.disabled=true;document.forms.LoginForm1.bbIbLoginAction.value='in-action';document.forms.LoginForm1.submit();"+
-                        "})()");
-                Toast toast = Toast.makeText(getApplicationContext(),
-                        String.valueOf(codes[Integer.valueOf(htmlContent)-1]), Toast.LENGTH_SHORT);
-                toast.show();
+                if (htmlContent != null) {
+                    wv.loadUrl("javascript:(function() { " +
+                            "document.getElementById('codevalue').value='" + String.valueOf(codes[Integer.valueOf(htmlContent) - 1]) + "';" +
+                            "this.disabled=true;document.forms.LoginForm1.bbIbLoginAction.value='in-action';document.forms.LoginForm1.submit();" +
+                            "})()");
+                    Toast.makeText(getApplicationContext(),
+                            String.valueOf(codes[Integer.valueOf(htmlContent) - 1]), Toast.LENGTH_SHORT).show();
+//                    toast.show();
                     isloggedin = true;
-                   // htmlContent=null;
+                    // htmlContent=null;
                 }
                 swipeRefreshLayout.setRefreshing(false);
 //                }
             }
         });
-        wv.loadUrl("https://ibank.asb.by");
+//        wv.loadUrl("https://ibank.asb.by");
     }
 
     @Override
@@ -126,6 +157,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         if (id == R.id.action_settings) {
             Intent myIntent = new Intent(MainActivity.this, SettingsActivity.class);
             MainActivity.this.startActivity(myIntent);
+            overridePendingTransition(R.anim.diagonaltranslate,R.anim.alpha);
         }
 
         return super.onOptionsItemSelected(item);
