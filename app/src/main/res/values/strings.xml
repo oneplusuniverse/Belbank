@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Беларусбанк</string>
+    <string name="action_settings">Настройки</string>
+    <string name="cost">Ваш счёт</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+</resources>
