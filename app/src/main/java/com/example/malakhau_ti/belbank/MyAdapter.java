@@ -1,43 +1,87 @@
 package com.example.malakhau_ti.belbank;
-
+import java.util.ArrayList;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-/**
- * Created by Malakhau_TI on 30.05.2016.
- */
-public class MyAdapterextends extends ArrayAdapter<String> {
-private final Context context;
-private final String[] values;
+public class MyAdapter extends BaseAdapter {
+    Context ctx;
+    LayoutInflater lInflater;
+    String[] codes;
 
-public MyAdapterextends(Context context, String[] values) {
-        super(context, R.layout.list_item, values);
-        this.context = context;
-        this.values = values;
+    MyAdapter(Context context, String[] codes) {
+        ctx = context;
+        this.codes = codes;
+        lInflater = (LayoutInflater) ctx
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    // кол-во элементов
+    @Override
+    public int getCount() {
+        return codes.length;
+    }
+
+    // элемент по позиции
+    @Override
+    public String getItem(int position) {
+        return codes[position];
+    }
+
+    // id по позиции
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    // пункт списка
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        final ViewHolder mHolder;
+
+        // используем созданные, но не используемые view
+
+        if (convertView == null) {
+            convertView = lInflater.inflate(R.layout.list_item, parent, false);
+            mHolder = new ViewHolder();
+            mHolder.codelabel = (TextView) convertView.findViewById(R.id.codeLabel);
+            mHolder.code = (EditText) convertView.findViewById(R.id.code);
+            convertView.setTag(mHolder);
+
         }
 
-@Override
-public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context
-        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View listviewC = inflater.inflate(R.layout., parent, false);
-        TextView textView = (TextView) rowView.findViewById(R.id.label);
-        ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
-        textView.setText(values[position]);
-        // Изменение иконки для Windows и iPhone
-        String s = values[position];
-        if (s.startsWith("Windows7") || s.startsWith("iPhone")
-        || s.startsWith("Solaris")) {
-        imageView.setImageResource(R.drawable.no);
-        } else {
-        imageView.setImageResource(R.drawable.ok);
-        }
+        //Product p = getProduct(position);
+        String p = GetElement(position);
 
-        return rowView;
-        }
+        // заполняем View в пункте списка данными из товаров: наименование, цена
+        // и картинка
+//        ((EditText) view.findViewById(R.id.code)).setText(p.name);
+        ((TextView) convertView.findViewById(R.id.codeLabel)).setText(p);
+
+        return convertView;
+    }
+
+    // товар по позиции
+    String GetElement(int position) {
+        return getItem(position);
+    }
+
+    static class ViewHolder {
+        TextView codelabel;
+        EditText code;
+        int position;
+    }
+
+
+
 }
