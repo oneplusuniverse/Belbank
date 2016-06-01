@@ -22,7 +22,7 @@
             android:layout_marginTop="10dp"
             android:text="Логин"
             android:ems="10"
-            android:id="@+id/editText2" />
+            android:id="@+id/Login" />
 
         <EditText
             android:layout_width="match_parent"
@@ -32,7 +32,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:ems="10"
-            android:id="@+id/editText"
+            android:id="@+id/Pass"
             android:layout_gravity="center_horizontal" />
 
         <Space
@@ -44,15 +44,14 @@
             android:dividerHeight="0dp"
             android:divider="@null"
             android:layout_width="match_parent"
-            android:layout_height="278dp"
+            android:layout_height="253dp"
             android:id="@+id/codelist"
             android:layout_gravity="center_horizontal"
             android:focusableInTouchMode="true"
             android:isScrollContainer="false"
             android:background="#f3ffed"
             android:padding="4dp"
-            android:layout_weight="0.54" />
-
+            android:layout_weight="0.56" />
 
     </LinearLayout>
 

@@ -1,8 +1,10 @@
 package com.example.malakhau_ti.belbank;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -25,9 +27,12 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     private String LASTURL = "";
     public String htmlContent;
     boolean isloggedin = false;
+    SharedPreferences sPref;
+    private static final String LOGIN  = "Saved_Login";
+    private static final String PASSWORD = "Saved_Pass";
 
-    String login;
-    String password;
+    String thislogin;
+    String thispassword;
     // init your codes array here
     int[] codes = new int[40];
 
@@ -35,7 +40,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        loadUserData();
 
         android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
         mActionBar.setDisplayShowHomeEnabled(false);
@@ -54,10 +59,10 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeResources(R.color.green, R.color.red, R.color.yellow, R.color.blue);
+        swipeRefreshLayout.setColorSchemeResources(R.color.green, R.color.red, R.color.blue);
 
         Toast toast = Toast.makeText(getApplicationContext(),
-                String.valueOf(mActionBar.getHeight()), Toast.LENGTH_SHORT);
+                thislogin, Toast.LENGTH_SHORT);
         toast.show();
 
         class MyJavaScriptInterface {
@@ -101,11 +106,11 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
 
             @Override
             public void onPageFinished(WebView view, String url) {
-//                if(!isloggedin){
+//                if(){
                 view.loadUrl("javascript:(function() { " +
-                        "document.getElementById('userID').value='" + login + "';" +
-                        "document.getElementById('password').value='" + password + "';" +
-                        "this.disabled=true;document.forms.LoginForm1.bbIbLoginAction.value='in-action';document.forms.LoginForm1.submit();" +
+                        "document.getElementById('userID').value='" + thislogin + "';" +
+                        "document.getElementById('password').value='" + thispassword + "';" +
+//                        "this.disabled=true;document.forms.LoginForm1.bbIbLoginAction.value='in-action';document.forms.LoginForm1.submit();" +
                         "})()");
 
                 wv.loadUrl("javascript:(function() { " +
@@ -157,5 +162,12 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     @Override
     public void onRefresh() {
         wv.loadUrl("https://ibank.asb.by");
+    }
+
+    void loadUserData() {
+
+        sPref = PreferenceManager.getDefaultSharedPreferences(this);
+        thislogin = sPref.getString(LOGIN, "none");
+        thispassword = sPref.getString(PASSWORD, "none");
     }
 }

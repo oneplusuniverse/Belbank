@@ -12,13 +12,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MyAdapter extends BaseAdapter {
     Context ctx;
     LayoutInflater lInflater;
-    String[] codes;
+    List_item_class[] codes;
 
-    MyAdapter(Context context, String[] codes) {
+    MyAdapter(Context context, List_item_class[] codes) {
         ctx = context;
         this.codes = codes;
         lInflater = (LayoutInflater) ctx
@@ -33,7 +34,7 @@ public class MyAdapter extends BaseAdapter {
 
     // элемент по позиции
     @Override
-    public String getItem(int position) {
+    public List_item_class getItem(int position) {
         return codes[position];
     }
 
@@ -57,22 +58,21 @@ public class MyAdapter extends BaseAdapter {
             mHolder.codelabel = (TextView) convertView.findViewById(R.id.codeLabel);
             mHolder.code = (EditText) convertView.findViewById(R.id.code);
             convertView.setTag(mHolder);
-
         }
 
         //Product p = getProduct(position);
-        String p = GetElement(position);
+        List_item_class p = GetElement(position);
 
         // заполняем View в пункте списка данными из товаров: наименование, цена
         // и картинка
-//        ((EditText) view.findViewById(R.id.code)).setText(p.name);
-        ((TextView) convertView.findViewById(R.id.codeLabel)).setText(p);
+        ((EditText) convertView.findViewById(R.id.code)).setText(p.Code);
+        ((TextView) convertView.findViewById(R.id.codeLabel)).setText(p.CodeLabel);
 
         return convertView;
     }
 
     // товар по позиции
-    String GetElement(int position) {
+    List_item_class GetElement(int position) {
         return getItem(position);
     }
 
