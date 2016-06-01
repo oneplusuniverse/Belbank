@@ -68,6 +68,7 @@ public class MyAdapter extends BaseAdapter {
         ((EditText) convertView.findViewById(R.id.code)).setText(p.Code);
         ((TextView) convertView.findViewById(R.id.codeLabel)).setText(p.CodeLabel);
 
+
         return convertView;
     }
 

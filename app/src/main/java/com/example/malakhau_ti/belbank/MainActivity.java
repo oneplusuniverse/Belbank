@@ -61,11 +61,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.green, R.color.red, R.color.blue);
 
-        Toast toast = Toast.makeText(getApplicationContext(),
-                thislogin, Toast.LENGTH_SHORT);
-        toast.show();
-
-        class MyJavaScriptInterface {
+       class MyJavaScriptInterface {
             @JavascriptInterface
             @SuppressWarnings("unused")
             public void processHTML(String html) {
@@ -161,6 +157,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
 
     @Override
     public void onRefresh() {
+        loadUserData();
         wv.loadUrl("https://ibank.asb.by");
     }
 

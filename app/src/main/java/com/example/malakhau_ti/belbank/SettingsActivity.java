@@ -12,7 +12,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class SettingsActivity extends ActionBarActivity implements View.OnClickListener {
@@ -25,14 +28,19 @@ public class SettingsActivity extends ActionBarActivity implements View.OnClickL
     private static final String PASSWORD = "Saved_Pass";
     EditText editorlogin;
     EditText editorpass;
-
+    String[] CodesArray = new String[40];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        for(int i = 0;i<40;i++){
+            sPref = PreferenceManager.getDefaultSharedPreferences(this);
+           CodesArray[i] = sPref.getString("code"+String.valueOf(i), "");
+        }
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        String[] Codes = new String[40];
         editorlogin = (EditText) findViewById(R.id.Login);
         editorpass = (EditText) findViewById(R.id.Pass);
 
@@ -41,18 +49,23 @@ public class SettingsActivity extends ActionBarActivity implements View.OnClickL
         delete = (Button) findViewById(R.id.DeleteBtn);
         delete.setOnClickListener(this);
 
-        List_item_class[] CodesLabels = new List_item_class[40];
+        List_item_class[] Codes = new List_item_class[40];
         for(int i = 0;i<40;i++){
-            CodesLabels[i] = new List_item_class();
-            CodesLabels[i].CodeLabel = "Код №"+String.valueOf(i+1);
-//            CodesLabels[i].Code = "";
+
+            sPref = PreferenceManager.getDefaultSharedPreferences(this);
+            Codes[i] = new List_item_class();
+            Codes[i].CodeLabel = "Код №"+String.valueOf(i+1);
+            Codes[i].Code = sPref.getString("code"+String.valueOf(i), "");
+
         }
         codelist =(ListView) findViewById(R.id.codelist);
 
-        MyAdapter adapter = new MyAdapter(this, CodesLabels );
+        MyAdapter adapter = new MyAdapter(this, Codes);
         codelist.setAdapter(adapter);
 
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -85,11 +98,17 @@ public class SettingsActivity extends ActionBarActivity implements View.OnClickL
         //Clear data in pref
         String[] Codes = new String[40];
         for(int i = 0;i<40;i++){
-            Codes[i] = "Код № "+String.valueOf(i+1);
+            Codes[i] = "Код №"+String.valueOf(i+1);
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                R.layout.list_item, R.id.code, Codes);
+                R.layout.list_item, R.id.codeLabel, Codes);
         codelist.setAdapter(adapter);
+        sPref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor ed = sPref.edit();
+        ed.clear();
+        ed.commit();
+        this.finish();
+        overridePendingTransition(R.anim.left_to_center, R.anim.center_to_right);
 
     }
 
@@ -100,7 +119,6 @@ public class SettingsActivity extends ActionBarActivity implements View.OnClickL
         ed.putString(LOGIN, editorlogin.getText().toString());
         ed.putString(PASSWORD, editorpass.getText().toString());
         ed.commit();
-        Toast.makeText(this, "Settings saved", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -111,7 +129,6 @@ public class SettingsActivity extends ActionBarActivity implements View.OnClickL
         String pass = sPref.getString(PASSWORD, "");
         editorlogin.setText(login);
         editorpass.setText(pass);
-        Toast.makeText(this, "Settings loaded successfully", Toast.LENGTH_SHORT).show();
 
     }
 
