@@ -57,8 +57,9 @@
 
     <Button
         android:layout_width="297dp"
+        style="?android:textAppearanceSmall"
         android:layout_height="wrap_content"
-        android:text="Clear All"
+        android:text="@string/wipe_all_prefs"
         android:id="@+id/DeleteBtn"
         android:focusableInTouchMode="false"
         android:isScrollContainer="false"

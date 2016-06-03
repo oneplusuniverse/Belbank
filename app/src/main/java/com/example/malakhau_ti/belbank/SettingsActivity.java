@@ -1,5 +1,6 @@
 package com.example.malakhau_ti.belbank;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -37,7 +38,7 @@ public class SettingsActivity extends ActionBarActivity implements View.OnClickL
 
         for(int i = 0;i<40;i++){
             sPref = PreferenceManager.getDefaultSharedPreferences(this);
-           CodesArray[i] = sPref.getString("code"+String.valueOf(i), "");
+           CodesArray[i] = sPref.getString("code"+String.valueOf(i), "non on Settings Activity "+String.valueOf(i+1));
         }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -49,18 +50,10 @@ public class SettingsActivity extends ActionBarActivity implements View.OnClickL
         delete = (Button) findViewById(R.id.DeleteBtn);
         delete.setOnClickListener(this);
 
-        List_item_class[] Codes = new List_item_class[40];
-        for(int i = 0;i<40;i++){
-
-            sPref = PreferenceManager.getDefaultSharedPreferences(this);
-            Codes[i] = new List_item_class();
-            Codes[i].CodeLabel = "Код №"+String.valueOf(i+1);
-            Codes[i].Code = sPref.getString("code"+String.valueOf(i), "");
-
-        }
         codelist =(ListView) findViewById(R.id.codelist);
 
-        MyAdapter adapter = new MyAdapter(this, Codes);
+        MyAdapter adapter = new MyAdapter(this);
+
         codelist.setAdapter(adapter);
 
     }
@@ -96,19 +89,16 @@ public class SettingsActivity extends ActionBarActivity implements View.OnClickL
 
     private void Delete(){
         //Clear data in pref
-        String[] Codes = new String[40];
-        for(int i = 0;i<40;i++){
-            Codes[i] = "Код №"+String.valueOf(i+1);
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                R.layout.list_item, R.id.codeLabel, Codes);
-        codelist.setAdapter(adapter);
+
         sPref = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor ed = sPref.edit();
         ed.clear();
         ed.commit();
         this.finish();
-        overridePendingTransition(R.anim.left_to_center, R.anim.center_to_right);
+//        overridePendingTransition(R.anim.left_to_center, R.anim.center_to_right);
+
+        Intent myIntent = new Intent(SettingsActivity.this, LoginActivity.class);
+        SettingsActivity.this.startActivity(myIntent);
 
     }
 

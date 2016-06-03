@@ -3,4 +3,25 @@
     <string name="action_settings">Настройки</string>
     <string name="cost">Ваш счёт</string>
     <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_login">Вход</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Логин</string>
+    <string name="prompt_password">Пароль</string>
+    <string name="action_sign_in">Сохранить и войти</string>
+    <string name="action_sign_in_short">Войти</string>
+    <string name="error_invalid_email">Неверное имя пользователя</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">Неверный пароль</string>
+    <string name="error_field_required">Необходимо заполнить это поле</string>
+    <string name="wipe_all_prefs">Сбросить все данные</string>
+    <string name="greetings">Добро пожаловать!\n\nПохоже вы впервые решили воспользоваться этим приложением.
+        При первом использовании введите свои актуальные Логин и Пароль для системы Интернет-Банкинг Беларусбанка.
+        Ваши данные сохранятся в локальном\nхранилище и будут служить для аутентификации в системе, а также для
+        входа в само приложение.\n\nПриятного использования!</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions." </string>
+    <string name="action_about">О программе</string>
+    <string name="about">Это клиентское приложение для системы Интернет-Банкинг Беларусбанка.
+        Ваши данные сохранятся в локальном\nхранилище и будут служить для аутентификации в системе, а также для
+        входа в само приложение.\nПриятного использования!</string>
 </resources>

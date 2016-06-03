@@ -1,5 +1,7 @@
 package com.example.malakhau_ti.belbank;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -30,11 +32,12 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     SharedPreferences sPref;
     private static final String LOGIN  = "Saved_Login";
     private static final String PASSWORD = "Saved_Pass";
+    private static final String IS_USER_EXISTING = "Is_User_Existing";
 
     String thislogin;
     String thispassword;
     // init your codes array here
-    int[] codes = new int[40];
+    String[] codes = new String[40];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,15 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         mActionBar.setDisplayShowCustomEnabled(true);
         Toolbar parent =(Toolbar) mCustomView.getParent();
         parent.setContentInsetsAbsolute(0,0);
+
+        sPref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor ed = sPref.edit();
+        String login = sPref.getString(LOGIN, "");
+        String pass = sPref.getString(PASSWORD, "");
+        if(login!=null&&pass!=null){
+            ed.putBoolean(IS_USER_EXISTING, true);
+            ed.commit();
+        }
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -114,6 +126,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
                         "})()");
 
                 if (htmlContent != null) {
+                    if(codes[Integer.valueOf(htmlContent)-1]!="none"){
                     wv.loadUrl("javascript:(function() { " +
                             "document.getElementById('codevalue').value='" + String.valueOf(codes[Integer.valueOf(htmlContent) - 1]) + "';" +
                             "this.disabled=true;document.forms.LoginForm1.bbIbLoginAction.value='in-action';document.forms.LoginForm1.submit();" +
@@ -123,6 +136,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
 //                    toast.show();
                     isloggedin = true;
                     // htmlContent=null;
+                    }
                 }
                 swipeRefreshLayout.setRefreshing(false);
 //                }
@@ -151,6 +165,21 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
             MainActivity.this.startActivity(myIntent);
             overridePendingTransition(R.anim.center_to_left,R.anim.right_to_center);
         }
+        if (id == R.id.action_about) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("О приложении")
+                    .setMessage(R.string.about)
+                    .setIcon(R.drawable.belbank_mini)
+                    .setCancelable(false)
+                    .setNegativeButton("Закрыть",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -166,5 +195,8 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         sPref = PreferenceManager.getDefaultSharedPreferences(this);
         thislogin = sPref.getString(LOGIN, "none");
         thispassword = sPref.getString(PASSWORD, "none");
+        for(int i = 0;i<40;i++){
+            codes[i] = sPref.getString("code"+String.valueOf(i),"none");
+        }
     }
 }
