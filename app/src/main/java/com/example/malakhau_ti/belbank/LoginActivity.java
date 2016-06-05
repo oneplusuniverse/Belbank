@@ -45,7 +45,8 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
      * TODO: remove after connecting to a real authentication system.
      */
     String[] DUMMY_CREDENTIALS;
-
+    String login;
+    String pass;
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -94,15 +95,10 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 
         sPref = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor ed = sPref.edit();
-        String login = sPref.getString(LOGIN, "");
-        String pass = sPref.getString(PASSWORD, "");
+        login = sPref.getString(LOGIN, "");
+        pass = sPref.getString(PASSWORD, "");
         isUserExisting = sPref.getBoolean(IS_USER_EXISTING,false);
 
-
-        DUMMY_CREDENTIALS = new String[]{
-//            "foo@example.com:hello", "a:a"
-                "a:a", pass+":"+login
-        };
         if(login!=null) {
             mEmailView.setText(login);
         }
@@ -341,31 +337,22 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
             if(isUserExisting){
-                for (String credential : DUMMY_CREDENTIALS) {
-                    String[] pieces = credential.split(":");
-                    if (pieces[0].equals(mEmail)) {
-
-
+                    if (login.equals(mEmail)) {
                         // Account exists, return true if the password matches.
-                        return pieces[1].equals(mPassword);
+                        return pass.equals(mPassword);
                     }
-                }
             }else{
                 SharedPreferences.Editor ed = sPref.edit();
                 ed.putString(LOGIN, mEmail);
                 ed.putString(PASSWORD, mPassword);
+                ed.putBoolean(IS_USER_EXISTING, true);
                 ed.commit();
+                return true;
             }
 
             // TODO: register the new account here.
-            return true;
+            return false;
         }
 
         @Override
@@ -380,6 +367,13 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
+                if(isUserExisting){
+//                    mEmailSignInButton.setText(R.string.action_sign_in_short);
+                    greetings.setVisibility(true ? View.GONE : View.VISIBLE);
+                }else{
+                    delete.setVisibility(true ? View.GONE : View.VISIBLE);
+
+                }
             }
         }
 

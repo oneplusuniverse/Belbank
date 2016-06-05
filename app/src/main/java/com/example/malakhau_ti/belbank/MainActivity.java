@@ -28,11 +28,13 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     private WebView wv;
     private String LASTURL = "";
     public String htmlContent;
-    boolean isloggedin = false;
+    boolean isloggedin;
     SharedPreferences sPref;
     private static final String LOGIN  = "Saved_Login";
     private static final String PASSWORD = "Saved_Pass";
     private static final String IS_USER_EXISTING = "Is_User_Existing";
+    int trig=0;
+    int trig1 = 0;
 
     String thislogin;
     String thispassword;
@@ -44,7 +46,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loadUserData();
-
+        isloggedin = false;
         android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
         mActionBar.setDisplayShowHomeEnabled(false);
         mActionBar.setDisplayShowTitleEnabled(false);
@@ -69,6 +71,10 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
             ed.commit();
         }
 
+        for(int i = 0;i<40;i++){
+            codes[i] = sPref.getString("code"+String.valueOf(i), "none");
+        }
+
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.green, R.color.red, R.color.blue);
@@ -91,6 +97,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         webSettings.setBuiltInZoomControls(true);
         webSettings.setDisplayZoomControls(false);
         wv.addJavascriptInterface(new MyJavaScriptInterface(), "HTMLOUT");
+        wv.getSettings().setDomStorageEnabled(true);
 
         wv.setWebViewClient(new WebViewClient() {
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
@@ -108,40 +115,50 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
 
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 LASTURL = url;
-
                 view.getSettings().setLoadsImagesAutomatically(false);
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
-//                if(){
-                view.loadUrl("javascript:(function() { " +
-                        "document.getElementById('userID').value='" + thislogin + "';" +
-                        "document.getElementById('password').value='" + thispassword + "';" +
-//                        "this.disabled=true;document.forms.LoginForm1.bbIbLoginAction.value='in-action';document.forms.LoginForm1.submit();" +
-                        "})()");
-
-                wv.loadUrl("javascript:(function() { " +
-                        "javascript:window.HTMLOUT.processHTML(document.getElementsByTagName('span')[0].innerHTML.replace(/\\D+/g,\"\"));" +
-                        "})()");
-
-                if (htmlContent != null) {
-                    if(codes[Integer.valueOf(htmlContent)-1]!="none"){
-                    wv.loadUrl("javascript:(function() { " +
-                            "document.getElementById('codevalue').value='" + String.valueOf(codes[Integer.valueOf(htmlContent) - 1]) + "';" +
+                if (isloggedin == false) {
+                    view.loadUrl("javascript:(function() { " +
+                            "document.getElementById('userID').value='" + thislogin + "';" +
+                            "document.getElementById('password').value='" + thispassword + "';" +
                             "this.disabled=true;document.forms.LoginForm1.bbIbLoginAction.value='in-action';document.forms.LoginForm1.submit();" +
                             "})()");
-                    Toast.makeText(getApplicationContext(),
-                            String.valueOf(codes[Integer.valueOf(htmlContent) - 1]), Toast.LENGTH_SHORT).show();
+
+                    view.loadUrl("javascript:(function() { " +
+                            "javascript:window.HTMLOUT.processHTML(document.getElementsByTagName('span')[0].innerHTML.replace(/\\D+/g,\"\"));" +
+                            "})()");
+
+                    if (htmlContent != null) {
+                        if (codes[Integer.valueOf(htmlContent) - 1] != "none") {
+
+
+                            wv.loadUrl("javascript:(function() { " +
+                                    "document.getElementById('codevalue').value='" + String.valueOf(codes[Integer.valueOf(htmlContent) - 1]) + "';" +
+                                    "this.disabled=true;document.forms.LoginForm1.bbIbLoginAction.value='in-action';document.forms.LoginForm1.submit();" +
+                                    "})()");
+                            Toast.makeText(getApplicationContext(),
+                                    String.valueOf(codes[Integer.valueOf(htmlContent) - 1]), Toast.LENGTH_SHORT).show();
 //                    toast.show();
-                    isloggedin = true;
-                    // htmlContent=null;
+                            if (trig >= 1) {
+                                isloggedin = true;
+                                trig = 0;
+                            }
+                            trig++;
+                            // htmlContent=null;
+                        }
                     }
+
+                    swipeRefreshLayout.setRefreshing(false);
+                } else {
+                    swipeRefreshLayout.setRefreshing(false);
                 }
-                swipeRefreshLayout.setRefreshing(false);
-//                }
+
             }
         });
+
 //        wv.loadUrl("https://ibank.asb.by");
     }
 
@@ -169,7 +186,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             builder.setTitle("О приложении")
                     .setMessage(R.string.about)
-                    .setIcon(R.drawable.belbank_mini)
+//                    .setIcon(R.drawable.belbank_purple_mini)
                     .setCancelable(false)
                     .setNegativeButton("Закрыть",
                             new DialogInterface.OnClickListener() {
@@ -187,7 +204,18 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     @Override
     public void onRefresh() {
         loadUserData();
+
+
+        if(isloggedin==false){
+
         wv.loadUrl("https://ibank.asb.by");
+
+            wv.loadUrl("https://ibank.asb.by");
+
+        }
+        else {
+            swipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     void loadUserData() {

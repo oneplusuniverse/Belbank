@@ -58,8 +58,6 @@ public class SettingsActivity extends ActionBarActivity implements View.OnClickL
 
     }
 
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

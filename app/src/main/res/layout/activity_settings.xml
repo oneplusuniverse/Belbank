@@ -49,7 +49,6 @@
             android:layout_gravity="center_horizontal"
             android:focusableInTouchMode="true"
             android:isScrollContainer="false"
-            android:background="#f3ffed"
             android:padding="4dp"
             android:layout_weight="0.56" />
 

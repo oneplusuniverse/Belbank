@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="513dp"
             android:id="@+id/wv"
-            android:layout_gravity="center_horizontal|bottom" />
+            android:layout_gravity="center_horizontal|bottom"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

@@ -24,6 +24,7 @@
         android:layout_height="fill_parent"
         android:inputType="numberDecimal"
         android:ems="10"
+        android:ellipsize="start"
         android:id="@+id/code"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
