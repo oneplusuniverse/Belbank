@@ -25,9 +25,11 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends ActionBarActivity implements SwipeRefreshLayout.OnRefreshListener{
@@ -36,12 +38,14 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     private SwipeRefreshLayout swipeRefreshLayout;
     private WebView wv;
     public String htmlContent;
+    public ArrayList<String> account_money = new ArrayList<>();
     boolean isloggedin;
     SharedPreferences sPref;
     private static final String LOGIN  = "Saved_Login";
     private static final String PASSWORD = "Saved_Pass";
     private static final String IS_USER_EXISTING = "Is_User_Existing";
     int trig=0;
+    Button switch_mode_btn;
     MyTask mt;
     boolean isdatafilled;
     String thislogin;
@@ -66,7 +70,18 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.green, R.color.red, R.color.blue);
-        parent.setContentInsetsAbsolute(0,0);
+        parent.setContentInsetsAbsolute(0, 0);
+        switch_mode_btn = (Button) findViewById(R.id.switch_mode_btn);
+        switch_mode_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (account_money.get(1) != null) {
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            account_money.get(0)+"\n"+account_money.get(1), Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+        });
         loadUserData();
         isloggedin = false;
         sPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -91,6 +106,14 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
             }
         }
 
+        class JavaScriptInterface_get_account_money {
+            @JavascriptInterface
+            @SuppressWarnings("unused")
+            public void processHTML(String html) {
+                account_money.add(html);
+            }
+        }
+
         wv = (WebView) findViewById(R.id.wv);
         WebSettings webSettings = wv.getSettings();
         webSettings.setSavePassword(true);
@@ -100,6 +123,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         webSettings.setBuiltInZoomControls(true);
         webSettings.setDisplayZoomControls(false);
         wv.addJavascriptInterface(new MyJavaScriptInterface(), "HTMLOUT");
+        wv.addJavascriptInterface(new JavaScriptInterface_get_account_money(), "MONEYOUT");
         wv.getSettings().setDomStorageEnabled(true);
         wv.setWebChromeClient(new WebChromeClient());
         wv.setInitialScale(1);
@@ -151,14 +175,11 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
 
 //                    TODO add javascript to convert web page content V
                             view.loadUrl("javascript:(function() { " +
-                                    "hide('header');"+
-                                    "hide('footer');"+
-//                                    "hide('menu');"+
-//                                    "document.getElementsByClassName('component-container contentMain ibmDndColumn id-Z7_0AG41KO0JOFV20AC1O152V30G2')[0].style.visibility='hidden';"+
-                                    "function hide(id){if (document.getElementById(id)){document.getElementById(id).style['display'] = 'none';}}"+
+                                    "document.getElementsByTagName('a')[11].click();"+
                                     "})()");
 
                             if (trig > 1) {
+
                                 findViewById(R.id.wv).setVisibility(View.VISIBLE);
                                 findViewById(R.id.progressBar).setVisibility(View.GONE);
                                 swipeRefreshLayout.setRefreshing(false);
@@ -170,6 +191,15 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
                     }
 
                 }
+                view.loadUrl("javascript:(function() { " +
+                        "hide('header');" +
+                        "hide('footer');" +
+                        "function hide(id){if (document.getElementById(id)){document.getElementById(id).style['display'] = 'none';}}" +
+//                        TODO Заменить на цикл, который пробегается по всем элементам и проверяет, числа ли там
+                        "javascript:window.MONEYOUT.processHTML(document.getElementsByTagName('nobr')[6].innerHTML);" +
+                        "javascript:window.MONEYOUT.processHTML(document.getElementsByTagName('nobr')[8].innerHTML);" +
+                        "})()");
+
             }
         });
     }
@@ -234,7 +264,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            wv.loadUrl("https://ibank.asb.by");
+                wv.loadUrl("https://ibank.asb.by");
 
         }
     }

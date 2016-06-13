@@ -27,4 +27,14 @@
         android:textAllCaps="true"
         android:textColor="#fff"/>
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@drawable/web1"
+        android:id="@+id/switch_mode_btn" />
+
 </LinearLayout>
