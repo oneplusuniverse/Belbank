@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="red">#ff2f00</color>
-    <color name="green">#1cb91c</color>
-    <color name="blue">#03b1cf</color>
+    <color name="green">#c54ab650</color>
+    <color name="blue">#4a82ec</color>
     <color name="yellow">#ff774d</color>
-    <color name="purple">#b43ed4</color>
+    <color name="purple">#1c2135</color>
     <color name="white">#ffffff</color>
-
+    <color name="button">#FFC4C24A</color>
 </resources>

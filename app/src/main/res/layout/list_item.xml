@@ -16,7 +16,7 @@
         android:layout_marginLeft="10dp"
         android:layout_toStartOf="@+id/code"
         android:textSize="18dp"
-        android:textStyle="bold"/>
+        android:textColor="@color/white"/>
 
     <EditText
         android:selectAllOnFocus="true"
@@ -28,5 +28,6 @@
         android:id="@+id/code"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginRight="10dp"/>
+        android:layout_marginRight="10dp"
+        android:textColor="@color/white"/>
 </RelativeLayout>

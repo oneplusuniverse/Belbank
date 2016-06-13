@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -23,12 +24,13 @@ public class SettingsActivity extends ActionBarActivity implements View.OnClickL
 
     private ListView codelist;
     Button delete;
-    final String LOG_TAG = "myLogs";
     SharedPreferences sPref;
     private static final String LOGIN  = "Saved_Login";
     private static final String PASSWORD = "Saved_Pass";
+    private static final String AUTOLOGIN = "autologin";
     EditText editorlogin;
     EditText editorpass;
+    CheckBox autologin;
     String[] CodesArray = new String[40];
 
     @Override
@@ -36,14 +38,20 @@ public class SettingsActivity extends ActionBarActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+
+
         for(int i = 0;i<40;i++){
             sPref = PreferenceManager.getDefaultSharedPreferences(this);
-           CodesArray[i] = sPref.getString("code"+String.valueOf(i), "non on Settings Activity "+String.valueOf(i+1));
+           CodesArray[i] = sPref.getString("code"+String.valueOf(i), "none");
         }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         editorlogin = (EditText) findViewById(R.id.Login);
         editorpass = (EditText) findViewById(R.id.Pass);
+        autologin = (CheckBox) findViewById(R.id.autologin_checkBox);
+
+        sPref = PreferenceManager.getDefaultSharedPreferences(this);
+        autologin.setChecked(sPref.getBoolean(AUTOLOGIN,false));
 
         loadUserData();
 
@@ -106,6 +114,12 @@ public class SettingsActivity extends ActionBarActivity implements View.OnClickL
         SharedPreferences.Editor ed = sPref.edit();
         ed.putString(LOGIN, editorlogin.getText().toString());
         ed.putString(PASSWORD, editorpass.getText().toString());
+
+        if(autologin.isChecked()){
+            ed.putBoolean(AUTOLOGIN, true);
+        }else {
+            ed.putBoolean(AUTOLOGIN, false);
+        }
         ed.commit();
 
     }

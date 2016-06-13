@@ -3,6 +3,8 @@ package com.example.malakhau_ti.belbank;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -42,9 +44,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 
     /**
      * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
      */
-    String[] DUMMY_CREDENTIALS;
     String login;
     String pass;
     /**
@@ -63,6 +63,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
     SharedPreferences sPref1;
     private static final String LOGIN  = "Saved_Login";
     private static final String PASSWORD = "Saved_Pass";
+    private static final String AUTOLOGIN = "autologin";
     private static final String IS_USER_EXISTING = "Is_User_Existing";
     boolean isUserExisting;
 
@@ -73,6 +74,12 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        sPref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor ed = sPref.edit();
+        login = sPref.getString(LOGIN, "");
+        pass = sPref.getString(PASSWORD, "");
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -84,8 +91,21 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
             public void onClick(View v) {
 
                     switch (v.getId()) {
-                    case R.id.wipe_all_prefs:
-                        Delete();
+                    case R.id.wipe_all_prefs: {
+                        AlertDialog.Builder alertdialogbuilder = new AlertDialog.Builder(ApplicationContextProvider.getContext());
+                        alertdialogbuilder.setIcon(android.R.drawable.ic_dialog_alert);
+                        alertdialogbuilder.setTitle("Подтвердите");
+                        alertdialogbuilder.setMessage("Вы действительно хотите удалить все данные?");
+                        alertdialogbuilder .setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Delete();
+                                    }
+
+                                })
+                                .setNegativeButton("Нет", null)
+                                .show();
+                    }
                         break;
                 }
             }
@@ -93,10 +113,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 //         TODO add a "back" button in ActionBar
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        sPref = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor ed = sPref.edit();
-        login = sPref.getString(LOGIN, "");
-        pass = sPref.getString(PASSWORD, "");
+
         isUserExisting = sPref.getBoolean(IS_USER_EXISTING,false);
 
         if(login!=null) {
@@ -134,6 +151,13 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        if(sPref.getBoolean(AUTOLOGIN,false)){
+            finish();
+            Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
+            LoginActivity.this.startActivity(myIntent);
+        }
+
     }
 
    private void Delete(){
@@ -146,7 +170,6 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
        Intent intent = getIntent();
        finish();
        startActivity(intent);
-//        this.finish();
 
     }
 
@@ -155,11 +178,8 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
         switch (item.getItemId()) {
             case android.R.id.home:
                 // app icon in action bar clicked; goto parent activity.
-
                 this.finish();
                 overridePendingTransition(R.anim.left_to_center, R.anim.center_to_right );
-//                overridePendingTransition(R.anim.alpha,R.anim.center_to_left);
-
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

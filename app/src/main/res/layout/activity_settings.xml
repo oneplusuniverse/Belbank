@@ -6,15 +6,14 @@
     android:layout_height="match_parent"
     tools:context="com.example.malakhau_ti.belbank.SettingsActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="1"
-        android:background="#ffffff">
+        android:background="@drawable/main_header_selector">
 
         <EditText
-            android:layout_width="match_parent"
+            android:layout_width="233dp"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:layout_marginLeft="10dp"
@@ -22,10 +21,25 @@
             android:layout_marginTop="10dp"
             android:text="Логин"
             android:ems="10"
-            android:id="@+id/Login" />
+            android:id="@+id/Login"
+            android:textColor="@color/white"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/autologin_checkBox" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/white"
+            android:text="Автовход"
+            android:id="@+id/autologin_checkBox"
+            android:layout_gravity="right"
+            android:layout_alignTop="@+id/Login"
+            android:layout_alignParentEnd="true"
+            android:layout_above="@+id/Pass" />
 
         <EditText
-            android:layout_width="match_parent"
+            android:layout_width="234dp"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:text="Пароль"
@@ -33,40 +47,75 @@
             android:layout_marginRight="10dp"
             android:ems="10"
             android:id="@+id/Pass"
-            android:layout_gravity="center_horizontal" />
+            android:textColor="@color/white"
+            android:layout_below="@+id/Login"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/autologin_checkBox" />
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/space"
+            android:layout_below="@+id/Pass"
+            android:layout_alignParentStart="true" />
 
         <ListView
             android:dividerHeight="0dp"
             android:divider="@null"
             android:layout_width="match_parent"
             android:layout_height="253dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:id="@+id/codelist"
             android:layout_gravity="center_horizontal"
             android:focusableInTouchMode="true"
             android:isScrollContainer="false"
             android:padding="4dp"
-            android:layout_weight="0.56" />
+            android:layout_weight="0.56"
+            android:layout_alignParentStart="true"
+            android:background="#4a000000"
+            android:layout_below="@+id/space"
+            android:layout_above="@+id/space2" />
 
-    </LinearLayout>
+        <RelativeLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:weightSum="1"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/relativeLayout">
 
-    <Button
-        android:layout_width="297dp"
-        style="?android:textAppearanceSmall"
-        android:layout_height="wrap_content"
-        android:text="@string/wipe_all_prefs"
-        android:id="@+id/DeleteBtn"
-        android:focusableInTouchMode="false"
-        android:isScrollContainer="false"
-        android:layout_gravity="center_horizontal"
-        android:layout_alignParentBottom="true"
-        android:background="#fd4545"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
-        android:textColor="#ffffff" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                style="?android:textAppearanceSmall"
+                android:layout_height="wrap_content"
+                android:text="@string/wipe_all_prefs"
+                android:id="@+id/DeleteBtn"
+                android:focusableInTouchMode="false"
+                android:isScrollContainer="false"
+                android:background="#fd4545"
+                android:textColor="#ffffff"
+                android:layout_weight="0.80"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true" />
+
+        </RelativeLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/space2"
+            android:layout_above="@+id/relativeLayout"
+            android:layout_alignParentStart="true" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

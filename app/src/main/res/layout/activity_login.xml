@@ -9,7 +9,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.malakhau_ti.belbank.LoginActivity"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:background="@drawable/main_header_selector">
 
     <!-- Login progress -->
     <ProgressBar
@@ -38,7 +39,9 @@
                 android:hint="@string/prompt_email"
                 android:inputType="text"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="#94ffffff"/>
 
             <EditText
                 android:id="@+id/password"
@@ -50,7 +53,9 @@
                 android:imeOptions="actionUnspecified"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="#94ffffff"/>
 
             <Button
                 android:id="@+id/email_sign_in_button"
@@ -60,8 +65,9 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/action_sign_in"
                 android:textStyle="bold"
-                android:background="@color/purple"
-                android:textColor="@color/white"/>
+                android:background="#fe4445"
+                android:textColor="@color/white"
+                android:translationZ="20dp" />
 
         </LinearLayout>
     </ScrollView>
@@ -81,7 +87,8 @@
             android:id="@+id/greetings"
             android:layout_gravity="center_horizontal"
             android:textSize="16sp"
-            android:gravity="center_horizontal" />
+            android:gravity="center_horizontal"
+            android:textColor="@color/white"/>
 
         <Button
             android:layout_gravity="bottom"
@@ -91,9 +98,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/wipe_all_prefs"
-            android:background="#fd4545"
+            android:background="@color/button"
             android:textColor="#ffffff"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:translationZ="20dp" />
 
     </LinearLayout>
 
